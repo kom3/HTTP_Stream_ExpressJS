@@ -2,7 +2,7 @@
 Streaming file data from expressJS sever and consuming the same in FE using fetch API
 
 ## Server Side Code:
-
+```
 app.get("/", (req, res) => {
   // required headers to stream the data
   res.setHeader("Content-Type", "text/event-stream");
@@ -21,10 +21,11 @@ app.get("/", (req, res) => {
   readableStream.pipe(res);
 });
 
-
+```
 
 ## Client side code:
 
+```
 // Cosuming the data stream using the fetch API
   fetch("http://localhost:3000/").then(async (response) => {
     const reader = response.body.getReader();
@@ -39,4 +40,4 @@ app.get("/", (req, res) => {
       console.log("Chunk...", chunk)
      }
   });
-
+```
