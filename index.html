@@ -1,0 +1,62 @@
+<script>
+  // Cosuming the data stream using the fetch API
+  fetch("http://localhost:3000/").then(async (response) => {
+    const reader = response.body.getReader();
+    let progress = 0;
+    while (true) {
+      const { done, value } = await reader.read();
+      console.log("done", done);
+      if (done) {
+        break;
+      }
+      const decoder = new TextDecoder();
+      const list_element = document.createElement("li");
+      list_element.innerText = decoder.decode(value);
+      document.getElementById("stream").append(list_element);
+      document.querySelector("#stream").scrollTop =
+        document.querySelector("#stream").scrollHeight;
+      console.log(
+        "scrooll height",
+        document.querySelector("#stream").scrollHeight
+      );
+      console.log("++progress", ++progress);
+      document.querySelector(".loader").style.width = `${++progress}px`;
+    }
+    document.querySelector(".loader").style.width = `100%`;
+  });
+</script>
+
+<h3 class="header">Data streaming via http</h3>
+<div class="container">
+  <div id="stream"></div>
+</div>
+<div class="loader"></div>
+
+<style>
+  .header {
+    text-align: center;
+  }
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .loader {
+    border: solid 1px rgb(252, 93, 2);
+    position: fixed;
+    top: 0;
+    margin: 0;
+    padding: 0;
+    left: 0;
+    top: 0;
+  }
+  #stream {
+    height: 500px;
+    width: 80%;
+    border: 10px solid rgb(180, 180, 180);
+    overflow: scroll;
+    padding: 10px;
+  }
+</style>
